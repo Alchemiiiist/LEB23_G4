@@ -1,10 +1,10 @@
 # “Linux 生物信息技术基础”总结报告 12
 
-> 组：G04<br/>次：<br/>组长：高大可<br/>讨论记录：吴航锐<br/>参与人员：高大可、邓昆月、唐明川、吴航锐<br/>上课时地：2023 年 5 月 22 日，15:10-17:00，35 楼 B107A<br/>讨论时地：2023 年 5 月 28 日，9:00-11:00，35 楼 B104（暂定）
+> 组：G04<br/>次：<br/>组长：高大可<br/>讨论记录：高大可<br/>参与人员：高大可、邓昆月、唐明川、吴航锐<br/>上课时地：2023 年 5 月 22 日，15:10-17:00，35 楼 B107A<br/>讨论时地：2023 年 5 月 28 日，9:00-11:00，35 楼 B104
 
 # 上课内容
 
-# 饶希晨：CHIP-seq
+# 饶希晨：ChIP-seq
 
 lscpu 查看 cpu
 
@@ -152,6 +152,114 @@ Multiple mapping：比对到多个位置，
 
 # <strong>讨论主题</strong>
 
+ChIP-seq 中质量检测的实现
+
+ChIP-seq 中低质量片段剪切的实现
+
+ChIP-seq 中比对的实现
+
 # 讨论内容
 
-# 存在问题
+目录结构
+
+![](static/TA7nb1fJpoGorqx5ok6cVFnznBJ.png)
+
+## 质量检测——fastqc
+
+```powershell
+nohup fastqc -t 20 -o 01.fastqc \
+        /DIRECTORY/data/*.fastq.gz > 01.fastqc/fastqc.log 2>&1 &
+```
+
+对存放 rawdata 目录中所有的 fastq 文件进行质控
+
+![](static/AzjYbllGRoOK2SxJxYwc2DVDnKh.png)
+
+程序自带输出为每个输入的.html 文件和.zip 文件
+
+由脚本得出的输出为 log 文件，记录了多个文件的质控状态。可输出为同一个 log 文件，或单独每个每个 fastq 文件生成 log 文件
+
+![](static/Ht2fbihjRoXwAJxk1ALczUJFnhb.png)
+
+## 低质量片段剪切——cutadapt
+
+```powershell
+for i in ctcf_chip_rep1 ctcf_chip_rep2 ctcf_chip_input
+do
+        nohup cutadapt -j 5 --time 1 -e 0.1 -O 3 --quality-cutoff 25 -m 55 \
+                -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+                -o ./02.cutadapt/${i}_r1.fastq.gz \
+                -p ./02.cutadapt/${i}_r2.fastq.gz \
+                /DIRECTORY/data/${i}_r1.fastaq.gz \
+                /DIRECTORY/data/${i}_r2.fastaq.gz \
+                > ./02.cutadapt/${i}_cutadapt.log 2>&1 &
+done
+```
+
+使用 for 循环并行、在后台不挂起地进行 cutadapt，去除低质量片段、短片段
+
+输入为原始数据，即上一步 fastqc 产生的文件不参与后续数据处理
+
+当使用脚本进行后台运行操作时，注意单个进程使用的线程、总线程数，防止占用过多公共资源
+
+生成 3 个 log 文件（来自于 3 个 for 循环），6 个 fastq.gz 文件（每个文件对应一个 rawdata）。
+
+![](static/PRr6bN8fVoCkSIx2knycARzXnqc.png)
+
+## 比对——bowtie2
+
+### 3.1 bowtie2-build
+
+```powershell
+bowtie2-build -f ./hg38_human.fa <strong>hg38</strong> > build_index.log 2>&1 &
+```
+
+第二个参数[hg38]为 index 前缀
+
+生成 6 个 index 文件，产生的 6 个 index 文件类型如图
+
+![](static/JPtAbF3rXok3bnx3KkMczZL4nUf.png)
+
+注意：每个比对软件生成的 index 不相同，比对时需要使用同一软件建立的 index
+
+如，STAR 建立的 index 如下
+
+![](static/UVesbYikho7maSxbXQYc2kX2nOe.png)
+
+### 3.2 bowtie2
+
+```powershell
+for i in ctcf_chip_rep1 ctcf_chip_input ctcf_chip_rep2
+do
+        nohup bowtie2 -x /DIRECTORY/Homo_sapiens.GRCh37.70.cdna.all \
+                -1 02.cutadapt/${i}_r1.fastq.gz \
+                -2 02.cutadapt/${i}_r2.fastq.gz \
+                -p 4 -S 03.bowtie2/${i}_mapped.sam > ./03.bowtie2/${i}_mapping.log 2>&1        &
+done
+```
+
+注意！-x 参数后的参考地址写到注释文件的前缀，即 bowtie2-build 时使用的前缀
+
+生成文件如下：
+
+![](static/GWklbgFNJoUtTKxIalqcs6ZsnZd.png)
+
+可使用 log 文件中的信息判断测序数据质量
+
+## 如何监测某一程序是否运行完毕
+
+（1）在脚本中添加 echo 语句，当运行完毕后输出信息到屏幕
+
+（2）ps -aux|grep 关键字。监控是否有相关程序在运行
+
+关键字可为：
+
+用户名：会输出当前用户的所有进程，包括部分系统进程
+
+使用软件：如 cutadapt，会输出软件相关的进程；有时单个来自用户的命令会调用多个不同的程序
+
+pid：精准获取某个进程的信息
+
+（3）查看生成的 log 文件（辅助手段）
+
+（4）查看文件大小、最后编辑时间，是否还在变化（辅助手段）
