@@ -1,0 +1,69 @@
+\documentclass[lang=cn,newtx,10pt,scheme=chinese]{elegantbook}
+
+% 本文档命令
+\usepackage{array}
+\usepackage{cprotect}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+
+
+% 标题页
+\title{Linux-based Essential Bioinformatics}
+\subtitle{LEB23G4：期末报告}
+
+\author{高大可，邓昆月，唐明川，吴航锐}
+% \institute{北京大学}
+\date{2023年6月20日}
+% \version{1.0}
+\bioinfo{指导老师}{罗静初}
+\extrainfo{} % 箴言(x)骚话(√)
+
+%% 标题页图片
+\logo{./figure/ubuntu-logo.png}
+\cover{./figure/cover.jpg}
+
+%% 修改标题页的色带颜色
+\definecolor{customcolor}{RGB}{32,178,170}
+\colorlet{coverlinecolor}{customcolor}
+
+% 设置目录深度为3
+\setcounter{tocdepth}{3}
+
+% 参考文献文件
+\addbibresource{reference.bib}  
+
+%-------------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+\frontmatter
+
+\include{sections/_author_info}
+\include{sections/_preface}
+
+\tableofcontents
+
+\mainmatter
+\include{sections/1_Environment}            % 环境配置
+\include{sections/2_Git-and-GitHub}         % GitHub
+\include{sections/3_Linux-base}             % Linux基础
+\include{sections/4_Alignment-and-Database} % Alignment and Database
+
+% EMBOSS
+% BLAST
+% HMMER
+
+% TBtools
+
+% ChIP-seq 
+% RNA-seq
+
+
+\nocite{*}
+\printbibliography[heading=bibintoc, title=\ebibname]
+
+% Acknowledgement
+
+\appendix
+\include{appendix/math_base}  % 数学基础
+
+\end{document}
