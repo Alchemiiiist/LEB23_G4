@@ -1,1 +1,255 @@
 \chapter{Linux基础}
+\section{Linux及操作系统简介}
+
+Linux是一种免费的开源操作系统。它基于Unix操作系统，由Linus Torvalds于1991年创建。Linux用于许多不同的设备，例如服务器，超级计算机，智能手机甚至汽车。它以其稳定性，安全性和灵活性而闻名。Linux有许多不同的发行版或“distros”，例如Ubuntu，Fedora，CentOS，Gentoo，Arch Linux等。
+
+Linux是基于命令行的操作系统，这意味着用户使用文本命令与之交互，而不是像Windows或Mac OS X那样使用图形用户界面（GUI）。它使用户对其系统拥有更多的控制权，并使他们更容易自动化任务。
+
+\subsection{Linux发行版}
+Linux发行版是一个由Linux内核、GNU工具、附加软件和软件包管理器组成的操作系统。它也可能包括显示服务器和桌面环境，以用作常规的桌面操作系统。这个术语之所以是“Linux发行版”，是因为像Debian、Ubuntu这样的机构“发行”了Linux内核以及所有必要的软件及实用程序（如网络管理器、软件包管理器、桌面环境等），使其可以作为一个操作系统使用。
+
+一些流行的Linux发行版包括Ubuntu，Fedora，CentOS，Gentoo，Arch Linux等。这些发行版都有自己的特点和优点，列举如下：
+\begin{itemize}
+    \item Fedora：面向开发人员，新版本的软件包更新频繁。
+    \item Debian：稳定，易于使用，适合服务器。
+    \item Ubuntu：易于使用，适合桌面用户。
+    \item CentOS：企业级操作系统，稳定性高。
+    \item Gentoo：高度可定制，适合高级用户。
+    \item Arch Linux：轻量级和自定义。
+\end{itemize}
+
+在本学期中，我们使用的是Ubuntu。
+
+\section{Linux教程网站}
+
+\begin{enumerate}
+    \item Data Science at the Command Line
+          https://datascienceatthecommandline.com/2e/
+    \item 菜鸟
+          https://www.runoob.com/linux/linux-tutorial.html
+
+    \item 自由的GNU/Linux发行版
+          https://www.gnu.org/distros/free-distros.html
+    \item Ubuntu问答社区
+          https://askubuntu.com/
+    \item 软件开发者
+          https://www.csdn.net/
+\end{enumerate}
+
+
+\section{Linux基本命令}
+
+\subsection{服务器有关命令}
+
+\subsubsection{登陆服务器}
+windows系统: window  powershell
+
+mac 系统： 终端(我的系统)
+
+使用ssh指令来进行用户名的登陆,如: ssh leb4b@117.78.18.116。登陆后，需要输入密码
+
+注：输入密码时，密码会进行保密，因此在界面上看不到输入的密码
+
+
+\subsubsection{查看服务器状态}
+
+\begin{enumerate}
+    \item 查看服务器此时登陆用户名名单
+
+          指令1:
+          \begin{lstlisting}
+w | less
+\end{lstlisting}
+
+          指令2:
+          \begin{lstlisting}
+who | less
+\end{lstlisting}
+
+    \item 查看我的用户名
+
+          指令：
+          \begin{lstlisting}
+whoami
+\end{lslisting}
+\item 修改自己用户的密码
+\begin{lstlisting}
+指令：   passwd
+\end{lstlisting}
+    \item 显示系统运行状态
+
+          指令：
+          \begin{lstlisting}
+top
+\end{lstlisting}
+
+\end{enumerate}
+
+\subsection{文件操作指令}
+\subsubsection{list指令}
+
+\begin{enumerate}
+    \item 查看下属文件
+          \begin{lstlisting}
+ls
+\end{lstlisting}
+
+    \item 查看下属文件时，同时查看文件的属性信息
+          \begin{lstlisting}
+ls -l
+\end{lstlisting}
+
+    \item 按照文件名大小排序
+          \begin{lstlisting}
+ls -s
+\end{lstlisting}
+
+    \item 按照时间排序
+          \begin{lstlisting}
+ls -t 
+\end{lstlisting}
+
+    \item 按照字节大小排序
+          \begin{lstlisting}
+ls -h 
+\end{lstlisting}
+
+    \item 显示目录下以.FASTA结尾的文件
+          \begin{lstlisting}
+ls *. FASTA 
+\end{lstlisting}
+
+    \item 显示目录下所有文件，并且一行只显示一个
+          \begin{lstlisting}
+ls -1 
+\end{lstlisting}
+
+    \item 列出根目录
+          \begin{lstlisting}
+ls ~
+\end{lstlisting}
+
+    \item 逐级显示当前目录下所有子目录和文件
+          \begin{lstlisting}
+ls -lR
+\end{lstlisting}
+
+    \item 逐屏显示当前目录下所有子目录和文件详细信息
+          \begin{lstlisting}
+ls -lR | less 
+\end{lstlisting}
+
+\end{enumerate}
+
+\subsubsection{cd指令}
+\begin{enumerate}
+
+    \item 进入ABC子目录
+          \begin{lstlisting}
+cd ABC
+\end{lstlisting}
+
+    \item 返回根目录
+          \begin{lstlisting}
+cd 
+\end{lstlisting}
+
+    \item 进入子目录ABC下面的二级子目录EFG
+          \begin{lstlisting}
+cd ABC/EFG
+\end{lstlisting}
+
+    \item 返回上级目录
+          \begin{lstlisting}
+cd ..
+\end{lstlisting}
+\end{enumerate}
+
+
+\subsubsection{新建、复制、删除、移动文件操作}
+\begin{enumerate}
+    \item 新建文件
+
+          \begin{lstlisting}
+mkdir                #建立文件名
+mkdir 0306 0313 0320 #建立以0306 0313 0320命名的多个文件夹
+mkdir 0227/HB        #在子目录0227下建立二级子目录HB
+\end{lstlisting}
+
+          \begin{lstlisting}
+cat > 文件夹名
+control c   #并且可以输入信息,退出该文件指令为:
+cat 文件名   #此外还可以通过查看指令来看文件内的信息
+\end{lstlisting}
+
+          \begin{lstlisting}
+nano 文件名
+\end{lstlisting}
+
+    \item 复制文件
+
+          \begin{lstlisting}
+cp a b   #将a复制,命名为b
+\end{lstlisting}
+
+    \item 重命名文件名
+          \begin{lstlisting}
+mv a b   #将a的名字改成b
+\end{lstlisting}
+
+    \item 删除文件
+          \begin{lstlisting}
+rm b   #将b文件夹删掉
+       #注意:chmod -w 文件 ，该指令能够改变文件属性，使之不能够被删除
+\end{lstlisting}
+
+    \item 建立软连接
+
+          \begin{lstlisting}
+ln -s #源文件 目标文件
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection{其他常用的指令}
+\begin{enumerate}
+    \item
+          查找文件的位置(例如查找needle的位置)
+          \begin{lstlisting}
+which needle
+whereis needle
+local needle
+\end{lstlisting}
+
+
+    \item 显示系统存储空间不同分区名称、容量和使用状态
+          \begin{lstlisting}
+df
+\end{lstlisting}
+
+
+    \item 显示当前目录下所有子目录和文件占用空间
+          \begin{lstlisting}
+du
+\end{lstlisting}
+
+    \item 按MB为单位显示/tmp目录占用空间
+          \begin{lstlisting}
+du –m /tmp
+\end{lstlisting}
+
+    \item
+          将文件209HBA.FASTA压缩
+          \begin{lstlisting}
+gzip 209HBA.FASTA
+\end{lstlisting}
+
+    \item 将子目录0307中及其子目录中所有文件生成归档文件
+          \begin{lstlisting}
+tar –cvf 0307.tar 0307
+\end{lstlisting}
+
+    \item 输入路径自动补齐文件名:tap
+    \item 重复上一次使用的指令:上箭头
+
+
+\end{enumerate}

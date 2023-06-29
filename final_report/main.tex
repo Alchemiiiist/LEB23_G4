@@ -5,6 +5,8 @@
 \usepackage{cprotect}
 \newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
 
+% 跨文档引用
+\usepackage{url} % to cite web url in the bibtex
 
 % 标题页
 \title{Linux-based Essential Bioinformatics}
@@ -12,21 +14,21 @@
 
 \author{高大可，邓昆月，唐明川，吴航锐}
 % \institute{北京大学}
-\date{2023年6月20日}
+\date{2023年6月30日}
 % \version{1.0}
 \bioinfo{指导老师}{罗静初}
-\extrainfo{} % 箴言(x)骚话(√)
+\extrainfo{这是我们一学期的成果，如果Harry看到了，他也会感到高兴的吧} % 箴言(x)骚话(√)
 
 %% 标题页图片
 \logo{./figure/ubuntu-logo.png}
-\cover{./figure/cover.jpg}
+\cover{./figure/cover.png}
 
 %% 修改标题页的色带颜色
 \definecolor{customcolor}{RGB}{32,178,170}
 \colorlet{coverlinecolor}{customcolor}
 
-% 设置目录深度为3
-\setcounter{tocdepth}{3}
+% 设置目录深度为2
+\setcounter{tocdepth}{2}
 
 % 参考文献文件
 \addbibresource{reference.bib}  
@@ -35,35 +37,36 @@
 \begin{document}
 
 \maketitle
-\frontmatter
 
-\include{sections/_author_info}
-\include{sections/_preface}
+\frontmatter
+\include{sections/_author_info}             % 作者信息
+\include{sections/_preface}                 % 前言
 
 \tableofcontents
 
+% 主要内容
 \mainmatter
-\include{sections/1_Environment}            % 环境配置
-\include{sections/2_Git-and-GitHub}         % GitHub
 \include{sections/3_Linux-base}             % Linux基础
+
 \include{sections/4_Alignment-and-Database} % Alignment and Database
+\include{sections/5_EMBOSS}                 % EMBOSS
+\include{sections/6_BLAST}                  % BLAST
+\include{sections/7_HMMER}                  % HMMER
 
-% EMBOSS
-% BLAST
-% HMMER
+\include{sections/8_TBtools}                % TBtools
 
-% TBtools
+\include{sections/9_ChIP-seq}               % ChIP-seq 
+\include{sections/10_RNA-seq}               % RNA-seq
 
-% ChIP-seq 
-% RNA-seq
+\include{sections/_acknowledgement}         % 致谢
 
+\appendix
+\include{appendix/Environment}            % 环境配置
+\include{appendix/Git-and-GitHub}         % GitHub
 
+% 参考文献
 \nocite{*}
 \printbibliography[heading=bibintoc, title=\ebibname]
 
-% Acknowledgement
-
-\appendix
-\include{appendix/math_base}  % 数学基础
-
+% \include{appendix/update_history}         % 更新记录
 \end{document}
