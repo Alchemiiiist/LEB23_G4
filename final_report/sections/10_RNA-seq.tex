@@ -14,7 +14,7 @@
 \end{figure}
 
 \section{RNA-seq上游分析}
-RNA-seq上游分析与ChIP-Seq类似，参见。故此处仅简单提及。
+RNA-seq上游分析与ChIP-Seq类似，参见上一章。故此处仅简单提及。
 
 \subsection{质控}
 原始数据为fastq.qz文件，一般是双端配套的比对结果，有两个文件
@@ -33,6 +33,7 @@ RNA-seq上游分析与ChIP-Seq类似，参见。故此处仅简单提及。
 \end{figure}
 
 \subsection{使用cutadapt去接头}
+与ChIP-Seq中相同。
 
 \subsection{比对}
 下载参考基因组，star建立索引。比对后，可以得到bam、log、log out、log final out文件
@@ -66,6 +67,7 @@ clusterprofiler包中的bitr函数可以进行symbol到ensembl id的转化
     #  install.packages("BiocManager")
     #BiocManager::install("EnhancedVolcano")
     #安装后，必须使用library命令激活
+\end{lstlisting}
 
 \begin{lstlisting}
     getwd()
@@ -123,6 +125,7 @@ Plotcount 可以查看目标基因的表达情况
 \end{lstlisting}
 
 \begin{figure}[ht]
+    \centering
     \includegraphics[width=10cm]{image/rnaseq/qc2.png}
 \end{figure}
 
@@ -136,6 +139,7 @@ Plotcount 可以查看目标基因的表达情况
 \end{lstlisting}
 
 \begin{figure}[ht]
+    \centering
     \includegraphics[width=13cm]{image/rnaseq/pca.png}
 \end{figure}
 
